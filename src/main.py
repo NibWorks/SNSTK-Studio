@@ -1,4 +1,4 @@
-from marshal import version
+
 import tkinter as tk
 from tkinter import filedialog
 from pathlib import Path
@@ -83,7 +83,8 @@ def load_image(preview_canvas, info_label):
 
 def show_create_stickers_page(window):
     for widget in window.winfo_children():
-        widget.destroy()
+        if str(widget) != ".menu_bar":
+            widget.destroy()
 
     title = tk.Label(window, text="Create Stickers", font=("Segoe UI", 24, "bold"))
     title.pack(pady=20)
@@ -158,7 +159,8 @@ def show_home_page(window):
     global preview_photo
 
     for widget in window.winfo_children():
-        widget.destroy()
+        if str(widget) != ".menu_bar":
+            widget.destroy()
 
     title = tk.Label(window, text="SNSTK Studio", font=("Segoe UI", 26, "bold"))
     title.pack(pady=(24, 8))
@@ -202,6 +204,8 @@ def show_home_page(window):
 
 def main():
     window = tk.Tk()
+  
+
     window.title("SNSTK Studio")
 
     if APP_ICON.exists():
@@ -209,10 +213,100 @@ def main():
 
     window.geometry("900x720")
     window.resizable(False, False)
-
+    create_menu_bar(window)
     show_home_page(window)
 
     window.mainloop()
+def show_about_window(window):
+    about = tk.Toplevel(window)
+    about.title("About SNSTK Studio")
+    about.geometry("420x420")
+    about.resizable(False, False)
+
+    if APP_ICON.exists():
+        about.iconbitmap(APP_ICON)
+
+    title = tk.Label(
+        about,
+        text="SNSTK Studio",
+        font=("Segoe UI", 20, "bold")
+    )
+    title.pack(pady=(25, 10))
+
+    if NIB_HAPPY.exists():
+        nib_image = Image.open(NIB_HAPPY).convert("RGBA")
+        nib_image.thumbnail((110, 110), Image.Resampling.LANCZOS)
+        about.nib_photo = ImageTk.PhotoImage(nib_image)
+
+        nib_label = tk.Label(about, image=about.nib_photo)
+        nib_label.pack(pady=5)
+
+    description = tk.Label(
+        about,
+        text="Create native Supernote sticker collections.",
+        font=("Segoe UI", 10),
+        wraplength=340,
+        justify="center"
+    )
+    description.pack(pady=(10, 8))
+
+    version = tk.Label(
+        about,
+        text="Version 0.5",
+        font=("Segoe UI", 10)
+    )
+    version.pack(pady=4)
+
+    creator = tk.Label(
+        about,
+        text="Built by NibWorks for the Supernote community.",
+        font=("Segoe UI", 9),
+        wraplength=340,
+        justify="center"
+    )
+    creator.pack(pady=(8, 18))
+
+    close_button = tk.Button(
+        about,
+        text="Close",
+        width=14,
+        command=about.destroy
+    )
+    close_button.pack()
+
+def create_menu_bar(window):
+    menu_frame = tk.Frame(window, bg="#f2f2f2", height=32, name="menu_bar")
+    menu_frame.pack(fill="x")
+
+    file_button = tk.Menubutton(
+        menu_frame,
+        text="File",
+        bg="#f2f2f2",
+        relief="flat",
+        font=("Segoe UI", 10)
+    )
+    file_button.pack(side="left", padx=(10, 5), pady=4)
+
+    file_menu = tk.Menu(file_button, tearoff=0)
+    file_menu.add_command(label="Exit", command=window.destroy)
+    file_button.config(menu=file_menu)
+
+    help_button = tk.Menubutton(
+        menu_frame,
+        text="Help",
+        bg="#f2f2f2",
+        relief="flat",
+        font=("Segoe UI", 10)
+    )
+    help_button.pack(side="left", padx=5, pady=4)
+
+    help_menu = tk.Menu(help_button, tearoff=0)
+    help_menu.add_command(
+    label="About SNSTK Studio",
+    command=lambda: show_about_window(window)
+)
+    help_button.config(menu=help_menu)
+    
 
 
 if __name__ == "__main__":

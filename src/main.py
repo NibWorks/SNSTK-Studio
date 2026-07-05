@@ -1,8 +1,10 @@
+from marshal import version
 import tkinter as tk
 from tkinter import filedialog
 from pathlib import Path
 from PIL import Image, ImageTk
 
+from paths import APP_ICON, NIB_HAPPY
 
 loaded_image_path = None
 preview_photo = None
@@ -153,35 +155,58 @@ def show_create_stickers_page(window):
 
 
 def show_home_page(window):
+    global preview_photo
+
     for widget in window.winfo_children():
         widget.destroy()
 
-    title = tk.Label(window, text="SNSTK Studio", font=("Segoe UI", 24, "bold"))
-    title.pack(pady=40)
+    title = tk.Label(window, text="SNSTK Studio", font=("Segoe UI", 26, "bold"))
+    title.pack(pady=(24, 8))
+
+    if NIB_HAPPY.exists():
+        nib_image = Image.open(NIB_HAPPY).convert("RGBA")
+        nib_image.thumbnail((170, 170), Image.Resampling.LANCZOS)
+        preview_photo = ImageTk.PhotoImage(nib_image)
+
+        nib_label = tk.Label(window, image=preview_photo)
+        nib_label.pack(pady=(2, 10))
 
     subtitle = tk.Label(
         window,
         text="Create native Supernote sticker collections",
         font=("Segoe UI", 12)
     )
-    subtitle.pack()
+    subtitle.pack(pady=(8, 0))
 
     create_button = tk.Button(
         window,
         text="Create Stickers",
-        width=20,
+        width=22,
         height=2,
         command=lambda: show_create_stickers_page(window)
     )
-    create_button.pack(pady=60)
+    create_button.pack(pady=(30, 40))
 
-    version = tk.Label(window, text="Version 0.3.2", font=("Segoe UI", 10))
-    version.pack(side="bottom", pady=20)
+    version = tk.Label(window, text="Version 0.4.1", font=("Segoe UI", 10))
+    version.pack(side="bottom", pady=5)
+
+    footer = tk.Label(
+        window,
+        text="Built by NibWorks for the Supernote community.",
+        font=("Segoe UI", 10)
+    )
+    footer.pack(side="bottom", pady=(0, 35))
+
+
 
 
 def main():
     window = tk.Tk()
     window.title("SNSTK Studio")
+
+    if APP_ICON.exists():
+        window.iconbitmap(APP_ICON)
+
     window.geometry("900x720")
     window.resizable(False, False)
 

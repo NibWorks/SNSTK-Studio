@@ -1,0 +1,376 @@
+# SNSTK Studio Style Guide
+
+Version: 1.0
+Last Updated: July 2026
+
+---
+
+# Purpose
+
+This document defines the visual identity, project organization, and coding conventions for SNSTK Studio.
+
+The goal is consistency. Every screen, icon, asset, and feature should feel like part of the same application.
+
+---
+
+# Brand
+
+Application Name
+
+SNSTK Studio
+
+Tagline
+
+Create native Supernote sticker collections.
+
+Mascot
+
+Nib
+
+Nib is the official SNSTK Studio mascot.
+
+Nib represents:
+
+• creativity
+• organization
+• simplicity
+• productivity
+• friendliness
+
+Nib should always appear calm, helpful, and encouraging.
+
+Avoid exaggerated or distracting expressions.
+
+---
+
+# Asset Library
+
+## Folder
+
+assets/
+
+### Nib
+
+assets/nib/
+
+Required files:
+
+nib_icon.png
+
+1024 × 1024
+
+Transparent background
+
+Used for:
+
+• Windows executable
+• Application icon
+• GitHub avatar
+
+---
+
+nib_happy.png
+
+512 × 512
+
+Transparent background
+
+---
+
+nib_blink.png
+
+512 × 512
+
+Transparent background
+
+Canvas position must match Happy Nib exactly.
+
+---
+
+nib_wave.png
+
+512 × 512
+
+Transparent background
+
+Canvas position must match Happy Nib exactly.
+
+---
+
+nib_thinking.png
+
+512 × 512
+
+Transparent background
+
+---
+
+nib_success.png
+
+512 × 512
+
+Transparent background
+
+---
+
+# Colors
+
+Current Theme
+
+Background
+
+White
+
+Buttons
+
+Light gray
+
+Text
+
+Black
+
+Accent
+
+Supernote gray
+
+Future dark mode may be added.
+
+---
+
+# Fonts
+
+Default
+
+Segoe UI
+
+Headings
+
+Bold
+
+Large
+
+Body
+
+Regular
+
+Readable
+
+Avoid decorative fonts.
+
+---
+
+# Window Standards
+
+Main Window
+
+900 × 720
+
+Resizable
+
+No
+
+Window Title
+
+SNSTK Studio
+
+---
+
+# Button Style
+
+Buttons should use simple wording.
+
+Preferred examples
+
+Create Stickers
+
+Browse...
+
+Back
+
+Cancel
+
+Help
+
+Avoid long button labels.
+
+---
+
+# Layout Philosophy
+
+SNSTK Studio should feel:
+
+• clean
+• uncluttered
+• calm
+• spacious
+
+Avoid:
+
+busy layouts
+
+heavy borders
+
+bright colors
+
+large icons
+
+---
+
+# Version Numbers
+
+Development
+
+0.1
+
+0.2
+
+0.3
+
+...
+
+Public Beta
+
+0.9
+
+Release
+
+1.0
+
+Use semantic versioning after 1.0.
+
+Example
+
+1.2.3
+
+Major.Minor.Patch
+
+---
+
+# Folder Structure
+
+SNSTK-Studio/
+
+assets/
+
+docs/
+
+src/
+
+tests/
+
+README.md
+
+LICENSE
+
+.gitignore
+
+---
+
+# Naming Convention
+
+Python
+
+snake_case
+
+Examples
+
+create_sticker()
+
+show_home_page()
+
+load_preview_image()
+
+Variables
+
+snake_case
+
+Classes
+
+PascalCase
+
+Examples
+
+StickerWindow
+
+ImageLoader
+
+ExportManager
+
+---
+
+# Git Commits
+
+Keep commit messages short.
+
+Examples
+
+Version 0.4
+
+Added Nib icon
+
+Improved preview scaling
+
+Fixed PNG transparency
+
+---
+
+# User Experience
+
+Every feature should answer one question:
+
+"Does this make creating Supernote stickers easier?"
+
+If not, reconsider adding it.
+
+SNSTK Studio should never become cluttered.
+
+Simplicity wins.
+
+---
+
+# Future Features
+
+Planned
+
+✓ Nib application icon
+
+✓ Idle animations
+
+✓ About window
+
+✓ Help system
+
+✓ Drag-and-drop
+
+✓ Batch processing
+
+✓ Sticker pack generator
+
+✓ Automatic updates
+
+✓ Settings
+
+✓ Theme support
+
+---
+
+# Guiding Principle
+
+SNSTK Studio should feel like a polished desktop application that quietly helps people create beautiful Supernote sticker collections.
+
+The software should never compete for attention.
+
+It should simply help users create.
+
+---
+# Development Philosophy
+
+Build one feature at a time.
+
+Finish each feature before beginning the next.
+
+Prefer simple, maintainable solutions over clever ones.
+
+When new ideas arise, add them to the backlog instead of interrupting the current milestone.
+
+Every release should leave the application in a working state.

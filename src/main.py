@@ -1,6 +1,6 @@
 
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from pathlib import Path
 from PIL import Image, ImageTk
 
@@ -79,8 +79,30 @@ def load_image(preview_canvas, info_label):
             f"File Size: {file_size}"
         )
     )
+def create_snstk(window, output_path):
+    if not hasattr(window, "selected_image_path"):
+        messagebox.showwarning("No Image Selected", "Please choose an image first.")
+        return
 
+    selected_size = window.selected_size.get()
+    output_folder = output_path.get()
 
+    print("Creating SNSTK...")
+    print("Image:", window.selected_image_path)
+    print("Size:", selected_size)
+    print("Output folder:", output_folder)
+
+    messagebox.showinfo(
+        "Create .SNSTK",
+        f"Ready to create sticker!\n\nSize: {selected_size} px\nOutput folder: {output_folder}"
+    )
+    create_button = tk.Button(
+        window,
+        text="Create .SNSTK",
+        width=20,
+        height=2,
+        command=lambda: create_snstk(window, output_path)
+    )
 def show_create_stickers_page(window):
     for widget in window.winfo_children():
         if str(widget) != ".menu_bar":
@@ -127,7 +149,33 @@ def show_create_stickers_page(window):
         command=lambda: load_image(preview_canvas, info_label)
     )
     browse_button.pack(pady=10)
+    # Output Folder
+    output_label = tk.Label(
+        window,
+        text="Output Folder",
+        font=("Segoe UI", 10, "bold")
+    )
+    output_label.pack(pady=(10, 2))
 
+    output_path = tk.StringVar(value="output")
+
+    # Frame to hold the output path and Browse button
+    output_frame = tk.Frame(window)
+    output_frame.pack(pady=(0, 10))
+
+    output_entry = tk.Entry(
+        output_frame,
+        textvariable=output_path,
+        width=45
+    )
+    output_entry.pack(side="left", padx=(0, 5))
+
+    browse_output_button = tk.Button(
+        output_frame,
+        text="Browse...",
+        width=10
+    )
+    browse_output_button.pack(side="left")
     size_label = tk.Label(window, text="Output Size", font=("Segoe UI", 12, "bold"))
     size_label.pack(pady=(15, 5))
 
@@ -145,13 +193,19 @@ def show_create_stickers_page(window):
             font=("Segoe UI", 10)
         ).pack(side="left", padx=8)
 
-    create_button = tk.Button(window, text="Create .SNSTK", width=20, height=2)
+    create_button = tk.Button(
+    window,
+    text="Create .SNSTK",
+    width=20,
+    height=2,
+    command=lambda: create_snstk(window, output_path)
+)
     create_button.pack(pady=18)
 
     back_button = tk.Button(window, text="Back", command=lambda: show_home_page(window))
     back_button.pack()
 
-    version = tk.Label(window, text="Version 0.3.2", font=("Segoe UI", 10))
+    version = tk.Label(window, text="Version 0.6.0", font=("Segoe UI", 10))
     version.pack(side="bottom", pady=8)
 
 
@@ -189,7 +243,7 @@ def show_home_page(window):
     )
     create_button.pack(pady=(30, 40))
 
-    version = tk.Label(window, text="Version 0.4.1", font=("Segoe UI", 10))
+    version = tk.Label(window, text="Version 0.6.0", font=("Segoe UI", 10))
     version.pack(side="bottom", pady=5)
 
     footer = tk.Label(
@@ -252,7 +306,7 @@ def show_about_window(window):
 
     version = tk.Label(
         about,
-        text="Version 0.5",
+        text="Version 0.6.0",
         font=("Segoe UI", 10)
     )
     version.pack(pady=4)

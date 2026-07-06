@@ -1,4 +1,4 @@
-
+import shutil
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from pathlib import Path
@@ -36,6 +36,13 @@ def prepare_preview_image(image):
     image.thumbnail((540, 260), Image.Resampling.LANCZOS)
     return image
 
+def update_ready_status(window):
+    global loaded_image_path
+
+    if loaded_image_path is not None:
+        window.status_label.config(text="Status: Ready to create")
+    else:
+        window.status_label.config(text="Status: Ready")
 
 def load_image(preview_canvas, info_label):
     global loaded_image_path, preview_photo
@@ -65,8 +72,9 @@ def load_image(preview_canvas, info_label):
         140,
         image=preview_photo,
         anchor="center"
+        
     )
-
+    
     file_size = format_file_size(loaded_image_path.stat().st_size)
     transparency = "Yes" if has_transparency(image) else "No"
 
@@ -79,30 +87,47 @@ def load_image(preview_canvas, info_label):
             f"File Size: {file_size}"
         )
     )
+
+    window = preview_canvas.winfo_toplevel()
+    window.status_label.config(text="Status: Ready to create")
+
+
+def browse_output_folder(window, output_path):
+    folder = filedialog.askdirectory()
+
+    if folder:
+        output_path.set(folder)
+        window.status_label.config(text="Status: Output folder selected")
+
 def create_snstk(window, output_path):
-    if not hasattr(window, "selected_image_path"):
+    global loaded_image_path
+
+    if loaded_image_path is None:
         messagebox.showwarning("No Image Selected", "Please choose an image first.")
         return
 
     selected_size = window.selected_size.get()
-    output_folder = output_path.get()
+    output_folder = Path(output_path.get())
 
-    print("Creating SNSTK...")
-    print("Image:", window.selected_image_path)
-    print("Size:", selected_size)
-    print("Output folder:", output_folder)
+    try:
+        window.status_label.config(text="Status: Creating...")
 
-    messagebox.showinfo(
-        "Create .SNSTK",
-        f"Ready to create sticker!\n\nSize: {selected_size} px\nOutput folder: {output_folder}"
-    )
-    create_button = tk.Button(
-        window,
-        text="Create .SNSTK",
-        width=20,
-        height=2,
-        command=lambda: create_snstk(window, output_path)
-    )
+        output_folder.mkdir(parents=True, exist_ok=True)
+
+        destination_file = output_folder / loaded_image_path.name
+        shutil.copy2(loaded_image_path, destination_file)
+
+        window.status_label.config(text="Status: Complete ✓")
+
+        messagebox.showinfo(
+            "Sticker Created",
+            f"Image copied successfully!\n\nSize selected: {selected_size} px\nSaved to:\n{destination_file}"
+        )
+
+    except Exception as error:
+        window.status_label.config(text="Status: Error")
+        messagebox.showerror("Error", f"Something went wrong:\n\n{error}")
+        
 def show_create_stickers_page(window):
     for widget in window.winfo_children():
         if str(widget) != ".menu_bar":
@@ -179,7 +204,8 @@ def show_create_stickers_page(window):
     browse_output_button = tk.Button(
         output_frame,
         text="Browse...",
-        width=10
+        width=10,
+        command=lambda: browse_output_folder(window, output_path)
     )
     browse_output_button.pack(side="left")
 

@@ -1,4 +1,5 @@
 from copy import error
+from email.mime import image
 import shutil
 import tkinter as tk
 from tkinter import filedialog, messagebox
@@ -120,7 +121,8 @@ def create_snstk(window, output_path):
 
         # Resize using the selected size
         new_size = int(selected_size)
-        image = image.resize((new_size, new_size), Image.Resampling.LANCZOS)
+        # Preserve aspect ratio while fitting inside selected size
+        image.thumbnail((new_size, new_size), Image.Resampling.LANCZOS)
 
         # Save the resized image
         base_name = loaded_image_path.stem

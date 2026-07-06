@@ -117,19 +117,28 @@ def create_snstk(window, output_path):
         output_folder.mkdir(parents=True, exist_ok=True)
 
         # Open the selected image
-        image = Image.open(loaded_image_path)
+        image = Image.open(loaded_image_path).convert("RGBA")
 
         # Resize using the selected size
         new_size = int(selected_size)
         # Preserve aspect ratio while fitting inside selected size
         image.thumbnail((new_size, new_size), Image.Resampling.LANCZOS)
 
-        # Save the resized image
+        # Create a transparent square canvas
+        canvas = Image.new("RGBA", (new_size, new_size), (0, 0, 0, 0))
+
+        # Calculate centered position
+        x = (new_size - image.width) // 2
+        y = (new_size - image.height) // 2
+
+        # Paste resized image onto the canvas
+        canvas.paste(image, (x, y), image if image.mode == "RGBA" else None)
+
+        # Save the finished sticker
         base_name = loaded_image_path.stem
         extension = loaded_image_path.suffix
-
         destination_file = output_folder / f"{base_name}_{selected_size}px{extension}"
-        image.save(destination_file)
+        canvas.save(destination_file)
 
         window.status_label.config(text="Status: Complete ✓")
 

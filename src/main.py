@@ -1,3 +1,4 @@
+from copy import error
 import shutil
 import tkinter as tk
 from tkinter import filedialog, messagebox
@@ -114,20 +115,31 @@ def create_snstk(window, output_path):
 
         output_folder.mkdir(parents=True, exist_ok=True)
 
-        destination_file = output_folder / loaded_image_path.name
-        shutil.copy2(loaded_image_path, destination_file)
+        # Open the selected image
+        image = Image.open(loaded_image_path)
+
+        # Resize using the selected size
+        new_size = int(selected_size)
+        image = image.resize((new_size, new_size), Image.Resampling.LANCZOS)
+
+        # Save the resized image
+        base_name = loaded_image_path.stem
+        extension = loaded_image_path.suffix
+
+        destination_file = output_folder / f"{base_name}_{selected_size}px{extension}"
+        image.save(destination_file)
 
         window.status_label.config(text="Status: Complete ✓")
 
         messagebox.showinfo(
-            "Sticker Created",
-            f"Image copied successfully!\n\nSize selected: {selected_size} px\nSaved to:\n{destination_file}"
-        )
+        "Sticker Created",
+        f"Image copied successfully!\n\nSize selected: {selected_size} px\nSaved to:\n{destination_file}"
+    )
 
     except Exception as error:
         window.status_label.config(text="Status: Error")
-        messagebox.showerror("Error", f"Something went wrong:\n\n{error}")
-        
+    messagebox.showerror("Error", f"Something went wrong:\n\n{error}")
+
 def show_create_stickers_page(window):
     for widget in window.winfo_children():
         if str(widget) != ".menu_bar":

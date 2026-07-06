@@ -1,5 +1,4 @@
-from copy import error
-from email.mime import image
+import os
 import shutil
 import tkinter as tk
 from tkinter import filedialog, messagebox
@@ -100,6 +99,13 @@ def browse_output_folder(window, output_path):
     if folder:
         output_path.set(folder)
         window.status_label.config(text="Status: Output folder selected")
+
+def open_output_folder(output_path):
+    folder = Path(output_path.get())
+
+    folder.mkdir(parents=True, exist_ok=True)
+
+    os.startfile(folder)
 
 def create_snstk(window, output_path):
     global loaded_image_path
@@ -249,14 +255,27 @@ def show_create_stickers_page(window):
             font=("Segoe UI", 10)
         ).pack(side="left", padx=8)
 
+    # Button row
+    button_frame = tk.Frame(window)
+    button_frame.pack(pady=(12, 6))
+
     create_button = tk.Button(
-        window,
+        button_frame,
         text="Create .SNSTK",
         width=20,
         height=2,
         command=lambda: create_snstk(window, output_path)
     )
-    create_button.pack(pady=(12, 6))
+    create_button.pack(side="left", padx=8)
+
+    open_button = tk.Button(
+        button_frame,
+        text="Open Output Folder",
+        width=20,
+        height=2,
+        command=lambda: open_output_folder(output_path)
+    )
+    open_button.pack(side="left", padx=8)
 
     # Status and Back row
     bottom_frame = tk.Frame(window)

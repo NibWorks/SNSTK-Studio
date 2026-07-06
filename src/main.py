@@ -108,39 +108,46 @@ def show_create_stickers_page(window):
         if str(widget) != ".menu_bar":
             widget.destroy()
 
-    title = tk.Label(window, text="Create Stickers", font=("Segoe UI", 24, "bold"))
-    title.pack(pady=20)
+    title = tk.Label(window, text="Sticker Builder", font=("Segoe UI", 24, "bold"))
+    title.pack(pady=(10, 4))
 
     instructions = tk.Label(
         window,
         text="Choose a PNG or JPG image to preview.",
         font=("Segoe UI", 12)
     )
-    instructions.pack(pady=5)
+    instructions.pack(pady=(0, 10))
+
+    main_frame = tk.Frame(window)
+    main_frame.pack(pady=5)
 
     preview_canvas = tk.Canvas(
-        window,
-        width=560,
-        height=280,
+        main_frame,
+        width=520,
+        height=250,
         bg="white",
         highlightthickness=1,
         highlightbackground="black"
     )
-    preview_canvas.pack(pady=15)
+    preview_canvas.pack(side="left", padx=(0, 20))
+
     preview_canvas.create_text(
-        280,
+        260,
         140,
         text="Image Preview Area",
         font=("Segoe UI", 12)
     )
 
     info_label = tk.Label(
-        window,
-        text="Image Information\nNo image selected.",
+        main_frame,
+        text="Image Information\n\nNo image selected.",
         font=("Segoe UI", 10),
-        justify="left"
+        justify="left",
+        anchor="nw",
+        width=32,
+        height=14
     )
-    info_label.pack(pady=5)
+    info_label.pack(side="left", anchor="n")
 
     browse_button = tk.Button(
         window,
@@ -148,20 +155,19 @@ def show_create_stickers_page(window):
         width=22,
         command=lambda: load_image(preview_canvas, info_label)
     )
-    browse_button.pack(pady=10)
-    # Output Folder
+    browse_button.pack(pady=(12, 8))
+
+    output_path = tk.StringVar(value="output")
+
     output_label = tk.Label(
         window,
         text="Output Folder",
         font=("Segoe UI", 10, "bold")
     )
-    output_label.pack(pady=(10, 2))
+    output_label.pack(pady=(5, 2))
 
-    output_path = tk.StringVar(value="output")
-
-    # Frame to hold the output path and Browse button
     output_frame = tk.Frame(window)
-    output_frame.pack(pady=(0, 10))
+    output_frame.pack(pady=(0, 8))
 
     output_entry = tk.Entry(
         output_frame,
@@ -176,8 +182,9 @@ def show_create_stickers_page(window):
         width=10
     )
     browse_output_button.pack(side="left")
+
     size_label = tk.Label(window, text="Output Size", font=("Segoe UI", 12, "bold"))
-    size_label.pack(pady=(15, 5))
+    size_label.pack(pady=(8, 3))
 
     window.selected_size = tk.StringVar(value="260")
 
@@ -194,16 +201,31 @@ def show_create_stickers_page(window):
         ).pack(side="left", padx=8)
 
     create_button = tk.Button(
-    window,
-    text="Create .SNSTK",
-    width=20,
-    height=2,
-    command=lambda: create_snstk(window, output_path)
-)
-    create_button.pack(pady=18)
+        window,
+        text="Create .SNSTK",
+        width=20,
+        height=2,
+        command=lambda: create_snstk(window, output_path)
+    )
+    create_button.pack(pady=(12, 6))
 
-    back_button = tk.Button(window, text="Back", command=lambda: show_home_page(window))
-    back_button.pack()
+    # Status and Back row
+    bottom_frame = tk.Frame(window)
+    bottom_frame.pack(fill="x", pady=(5, 0), padx=25)
+
+    window.status_label = tk.Label(
+        bottom_frame,
+        text="Status: Ready",
+        font=("Segoe UI", 10)
+    )
+    window.status_label.pack(side="left")
+
+    back_button = tk.Button(
+        bottom_frame,
+        text="Back",
+        command=lambda: show_home_page(window)
+    )
+    back_button.pack(side="right")
 
     version = tk.Label(window, text="Version 0.6.0", font=("Segoe UI", 10))
     version.pack(side="bottom", pady=8)
